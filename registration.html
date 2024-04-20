@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация студента</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: rgb(180, 173, 145);
+            font-family: arial, sans-serif;
+        }
+
+        form {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: calc(100% - 10px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: rgb(33, 172, 57);
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        h1 {
+            text-align: left;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form id="registrationForm" action="/submit_registration" method="POST">
+        <h1>Регистрация</h1>
+        <label for="surname">Фамилия:</label><br>
+        <input type="text" id="surname" name="surname" required><br>
+        
+        <label for="name">Имя:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        
+        <label for="patronymic">Отчество:</label><br>
+        <input type="text" id="patronymic" name="patronymic"><br>
+        
+        <label for="university">ВУЗ:</label><br>
+        <input type="text" id="university" name="university" required><br>
+        
+        <label for="course">Курс:</label><br>
+        <input type="number" id="course" name="course" min="1" required><br>
+        
+        <input type="submit" value="Зарегистрироваться">
+    </form>
+</body>
+</html>
