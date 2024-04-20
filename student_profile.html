@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль студента</title>
+    <title>Student Profile</title>
 </head>
 <body>
-    <h1>Профиль студента</h1>
-    <p><strong>Фамилия:</strong> {{ student.surname }}</p>
-    <p><strong>Имя:</strong> {{ student.name }}</p>
-    <p><strong>Отчество:</strong> {{ student.patronymic }}</p>
-    <p><strong>ВУЗ:</strong> {{ student.university }}</p>
-    <p><strong>Курс:</strong> {{ student.course }}</p>
+    <h1>Student Profile</h1>
+    <ul>
+        <li><strong>Surname:</strong> {{ student.surname }}</li>
+        <li><strong>Name:</strong> {{ student.name }}</li>
+        {% if student.patronymic %}
+        <li><strong>Patronymic:</strong> {{ student.patronymic }}</li>
+        {% endif %}
+        <li><strong>University:</strong> {{ student.university }}</li>
+        <li><strong>Course:</strong> {{ student.course }}</li>
+    </ul>
 </body>
 </html>
