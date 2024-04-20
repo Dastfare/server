@@ -1,45 +1,42 @@
-from flask import Flask, request, render_template
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
+db = SQLAlchemy(app)
 
-# Определение модели данных
-Base = declarative_base()
+class Student(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    surname = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    patronymic = db.Column(db.String(100))
+    university = db.Column(db.String(100), nullable=False)
+    course = db.Column(db.Integer, nullable=False)
 
-class Student(Base):
-    __tablename__ = 'students'
+@app.route('/')
+def index():
+    return render_template('registration.html')
 
-    id = Column(Integer, primary_key=True)
-    surname = Column(String(255), nullable=False)
-    name = Column(String(255), nullable=False)
-    patronymic = Column(String(255))
-    university = Column(String(255), nullable=False)
-    course = Column(Integer, nullable=False)
+@app.route('/register', methods=['POST'])
+def register():
+    if request.method == 'POST':
+        surname = request.form['surname']
+        name = request.form['name']
+        patronymic = request.form['patronymic']
+        university = request.form['university']
+        course = request.form['course']
 
-# Создание подключения к базе данных
-engine = create_engine('sqlite:///students.db', echo=True)
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)
-session = Session()
+        new_student = Student(surname=surname, name=name, patronymic=patronymic, university=university, course=course)
+        db.session.add(new_student)
+        db.session.commit()
 
-# Обработчик маршрута регистрации студента
-@app.route('/submit_registration', methods=['POST'])
-def submit_registration():
-    # Получение данных из формы
-    surname = request.form['surname']
-    name = request.form['name']
-    patronymic = request.form['patronymic']
-    university = request.form['university']
-    course = int(request.form['course'])
+        # После успешной регистрации перенаправляем пользователя на страницу профиля студента
+        return redirect(url_for('student_profile', student_id=new_student.id))
 
-    # Создание объекта Student и добавление его в базу данных
-    new_student = Student(surname=surname, name=name, patronymic=patronymic, university=university, course=course)
-    session.add(new_student)
-    session.commit()
-
-    return 'Студент успешно добавлен в базу данных.'
+@app.route('/student_profile/<int:student_id>')
+def student_profile(student_id):
+    student = Student.query.get_or_404(student_id)
+    return render_template('student_profile.html', student=student)
 
 if __name__ == '__main__':
     app.run(debug=True)
