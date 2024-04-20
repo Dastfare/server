@@ -5,6 +5,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
 db = SQLAlchemy(app)
 
+
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     surname = db.Column(db.String(100), nullable=False)
@@ -13,9 +14,11 @@ class Student(db.Model):
     university = db.Column(db.String(100), nullable=False)
     course = db.Column(db.Integer, nullable=False)
 
+
 @app.route('/')
 def index():
     return render_template('registration.html')
+
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -30,13 +33,14 @@ def register():
         db.session.add(new_student)
         db.session.commit()
 
-        # После успешной регистрации перенаправляем пользователя на страницу профиля студента
         return redirect(url_for('student_profile', student_id=new_student.id))
+
 
 @app.route('/student_profile/<int:student_id>')
 def student_profile(student_id):
     student = Student.query.get_or_404(student_id)
     return render_template('student_profile.html', student=student)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
